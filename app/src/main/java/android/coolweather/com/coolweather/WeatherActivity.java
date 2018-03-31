@@ -257,18 +257,23 @@ public class WeatherActivity extends AppCompatActivity {
     private void showForecastInfo(ForecastWeather weather){
 
         forecastLayout.removeAllViews();
+        weather.forecastList.remove(0);
         for(Forecast forecast : weather.forecastList){
             View view = LayoutInflater.from(this).inflate(R.layout.forecast_item,
                     forecastLayout, false);
             TextView dateText = (TextView)view.findViewById(R.id.date_text);
-            TextView infoText = (TextView)view.findViewById(R.id.info_text);
+            TextView dayText = (TextView)view.findViewById(R.id.day_text);
+            TextView nightText = (TextView)view.findViewById(R.id.night_text);
+            TextView popText = (TextView)view.findViewById(R.id.pop_text);
             TextView maxText = (TextView)view.findViewById(R.id.max_text);
             TextView minText = (TextView)view.findViewById(R.id.min_text);
-            Log.d("镖旗", "showForecastInfo: "+forecast.date);
+           //Log.d("镖旗", "showForecastInfo: "+forecast.date);
             dateText.setText(forecast.date);
-            infoText.setText(forecast.pop);
-            maxText.setText(forecast.tmp_max);
-            minText.setText(forecast.tmp_min);
+            dayText.setText(forecast.day_text);
+            nightText.setText(forecast.night_text);
+            popText.setText(forecast.pop+" %");
+            maxText.setText(forecast.tmp_max+"°C");
+            minText.setText(forecast.tmp_min+"°C");
             forecastLayout.addView(view);
         }
     }
