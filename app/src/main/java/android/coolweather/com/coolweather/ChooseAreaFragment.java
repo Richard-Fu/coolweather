@@ -1,6 +1,7 @@
 package android.coolweather.com.coolweather;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.coolweather.com.coolweather.db.City;
 import android.coolweather.com.coolweather.db.County;
 import android.coolweather.com.coolweather.db.Province;
@@ -111,6 +112,20 @@ public class ChooseAreaFragment extends Fragment{
                 }else if(currentLevel == LEVEL_CITY){
                     selectedCity = cityList.get(position);
                     queryCounties();
+                }else if(currentLevel == LEVEL_COUNTY){
+                    String cityName = countyList.get(position).getCountyName();
+                    if(getActivity() instanceof MainActivity){
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("cityName", cityName);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if(getActivity() instanceof WeatherActivity){
+                        WeatherActivity activity = (WeatherActivity)getActivity();//获取那个活动类
+                        activity.drawerLayout.closeDrawers();
+                        activity.swipeRefreshLayout.setRefreshing(true);//更新  更新UI
+                        activity.requestWeather(cityName);
+                    }
+
                 }
             }
         });
@@ -167,6 +182,7 @@ public class ChooseAreaFragment extends Fragment{
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
             currentLevel = LEVEL_CITY;
+            Toast.makeText(getActivity(), selectedProvince.getProvinceCode()+"",Toast.LENGTH_SHORT).show();
         }else{
             int provinceCode = selectedProvince.getProvinceCode();
             String address = "http://guolin.tech/api/china/" + provinceCode;
@@ -189,6 +205,7 @@ public class ChooseAreaFragment extends Fragment{
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
             currentLevel = LEVEL_COUNTY;
+            Toast.makeText(getActivity(), selectedCity.getCityCode()+"",Toast.LENGTH_SHORT).show();
         }else{
             int provinceCode = selectedProvince.getProvinceCode();
             int cityCode = selectedCity.getCityCode();//明白这些Code的重要性了
